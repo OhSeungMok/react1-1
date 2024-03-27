@@ -1,5 +1,57 @@
 # 오승목 202030321학번
+## 03월 27일 강의 내용
+### JSX(Java Script XML)
+#### JSX(Java Script XML)란?
+* Javascript에 XML을 추가한 확장한 문법입니다.
+#### JSX의 역할
+* JSX는 내부적으로 XML/HTML 코드를 자바스크립트로 변환합니다.
+* React가 createElement함수를 사용하여 자동으로 자바스크립트로 변환해줍니다.
+* 만일 JS작업할 경우 직접 createElement함수를 사용해야 합니다.
+* JSX는 가독성을 높여주는 역할을 합니다.
+``` js
+import Hello from './Hello'
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+    <Hello toWhat="World" />
+  </React.StrictMode>
+);
+//모든 엘리먼트를 React DOM에서 관리하기 때문에 이것을 “루트(root)” DOM 노드라고 부릅니다.
+
+import React from "react"; 
+
+class Hello extends React.Component {
+    render() { //render이라는 함수를 통해 div태그를 전달 
+        return <div>Hello {this.props.toWhat}</div>
+    } //props 는 properties 의 줄임말입니다. 우리가 어떠한 값을 컴포넌트에게 전달해줘야 할 때, props 를 사용합니다.
+}
+
+// const root = ReactDOM.creatPortal(document,getElementById('root'))
+// root.render(<Hello toWhat="World "/>)
+export default Hello;
+// 
+```
+* 모든 자바스크립트 문법을 지원합니다.
+* 자바스크립트 문법에 XML과 HTML을 섞어서 사용합니다
+* 만일 html이나 xml에 자바스크립트 코드를 사용하고 싶으면 {}괄호를 사용합니다.
+```js
+const name = '승목';
+const element = <h1>안녕 {name}</h1>;
+
+ReactDOM.render(
+    element,
+    document.getElementById('root')
+);
+```
+* 만일 태그의 속성값을 사용하고 싶을 때는 다음과 같이 합니다.
+``` js
+const element = <div tabIndex='0'></div>;
+const element = <img src={user.avataUrl}></img>;
+```
+https://github.com/soaple/first-met-react-practice-v18
+소스코드를 잘 모르겠다면 공부하기!
 ## 03월 20일 강의 내용
 ### 리액트
 #### 리액트는 무엇인가?
