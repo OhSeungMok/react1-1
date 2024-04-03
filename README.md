@@ -1,8 +1,160 @@
 # 오승목 202030321학번
+## 04월 03일 강의 내용
+### 컴포넌트
+* 컴포넌트 구조라는 것은 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여 전체 페이지를 구성한다는 것을 의미한다.
+* 재사용이 가능하기 때문에 전체 코드의 양을 줄일 수 있어 개발 시간과 유지 보수 비용이 줄어듭니다.
+
+### Props
+* props는 prop(property: 속성, 특성)의 준말입니다. 바로 이 props가 바로 컴포넌트의 속성이다.
+* 컴포넌트에 어떤 속성, props를 넣는냐에 따라서 속성이 다른 엘리먼트가 출력됩니다.
+* props는 컴포넌트에 전달 할 다양한 정보를 담고 있는 자바스크립트 객체입니다.
+* 읽기 전용이여서 변경할 수 없다.(수정 불가)
+* 속성이 다른 엘리먼트를 생성하려면 새로운 props를 컴포넌트에 전달하면 됩니다.
+
+### Props 사용법
+key-value쌍으로 props를 구성
+``` jsx
+function App(props) {
+    return ( 
+        <Profile
+            name="승목"
+            introduction="안녕하세요, 승목입니다."
+            viewCount={1500}
+            />
+    );
+}
+```
+1. App컴포넌트에서 props를 인자로 받아,
+2. 내부의 Profile 컴포넌트로 전달해서 name, introduction, viewCount에 각각 속성을 할당하는,
+3. 이떄 전달되는 props는 다음과 같은 자바스크립트 객체입니다.
+``` jsx
+{
+    name : "승목"
+    introduction: "안녕하세요 승목입니다."
+}
+```
+props를 통해서 value를 할당할 수 있고, 직접 중괄호를 사용하여 할당할 수도 있습니다.
+``` jsx
+function App(props) {
+    return (
+        <Layout
+            width={2560}
+            height={1440}
+            header={
+                <Header title="소플의 블로그입니다." />
+                //header의 대소문자를 구분하는 이유는 html과 구별하기 위해서
+            }
+            footer={
+                <Footer />
+            }
+        />
+    );
+}
+```
+jsx를 사용하지 않는 경우 props의 전달방법은 createElement()함수를 사용한다
+``` jsx
+React.createElement(
+    type,
+    [props],
+    [...children]
+)
+```
+
+### 컴포넌트의 종류
+* 리액트 초기 버전을 사용할 때는 클래스형 컴포넌트를 주로 사용했지만 최근에는 Hook이라는 개념이 나오면서 함수형 컴포넌트를 주로 사용
+
+### 함수형 컴포넌트
+* Welcome컴포넌트는 props를 받아, 받은 props중 name키의 값을 "안녕", 뒤에 넣어 반환
+``` jsx
+function Welcome(props) {
+    return <h1>안녕, {props.name}</h1>;
+}
+```
+
+### 클래스형 컴포넌트
+* Welcome 컴포넌트 React.Component class로부터 상속을 받아 선언
+``` jsx
+class App extends Component {
+  render() {
+    const name = 'react';
+    return <div className="react">{name}</div>
+  }
+}
+```
+
+### 컴포넌트 이름 짓기
+* 이름은 항상 대문자, 리액트는 소문자로 시작하는 컴포넌트를 DOM 태그로 인식하기 때문
+* 컴포넌트 파일 이름과 컴포넌트 이름은 같게 해아 함
+
+### 컴포넌트 렌더링
+html 요소(element), 또는 React 요소 등의 코드가 눈으로 볼 수 있도록 그려지는 것을 렌더링(rendering) 이라고 말합니다.
+``` jsx
+function Welcome(props) {
+    return <h1>안녕, {props.name}</h1>;
+}
+
+const element = <Welcome name="인제" />;
+ReactDOM.render(
+    element,
+    document.getElementById('root')
+);
+```
+
+### pure함수 VS impure 함수
+* pure함수는 인수로 받은 정보가 함수 내부에서도 변하지 않는 함수
+* impure함수는 인수로 받은 정보가 함수 내부에서 변하는 함수
+
+### 컴포넌트 합성
+* 컴포넌트 합성은 여러 개의 컴포넌트를 합쳐서 하나의 컴포넌트를 만드는 것입니다.
+* 리액트에서는 컴포넌트 안에 또 다른 컴포넌트를 사용할 수 있기 때문에, 복잡한 화면을 여러 개의 컴포넌트로 구성할 수 있다.
+``` jsx
+function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>;
+}
+
+fucntion App(props) {
+    return (
+        <div>
+            <Welcome name="Seungmok" />
+            <Welcome name="donghwan" />
+            <Welcome name="han" />
+        </div>
+    )
+}
+
+ReactDOM.render(
+    element,
+    document.getElementById('root')
+);
+```
+
+### 컴포넌트 추출
+* 복잡한 컴포넌트를 쪼개서 여러 개의 컴포넌트로 나눌 수 있다.
+* 큰 컴포넌트에서 일부를 추출해서 새로운 컴포넌트를 만드는 것.
+* 실무에서는 처음부터 1개의 컴포넌트에 하나의 기능만 사용하도록 설계하는 것이 좋음
+
+### State
+* State는 리액트 컴포넌트의 상태를 의미
+* 상태의 의미는 정상인지 비정상장인지가 아니라 컴포넌트의 데이터를 의미. 정확히는 컴포넌트의 변경가능한 데이터 의미
+* State가 변하면 다시 렌더링이 되기 때문에 렌더링과 관련된 값만 state에 포함시켜야 함
+* state는 변경 가능하지만 직접 수정하면 안 됨. 불가능하다고 생각
+* state를 변경하고자 할 때는 setstate()함수 사용
+
+### 생명주기
+* 생명주기는 컴포넌트의 생성 시점, 사용 시점, 종료 시점을 나타내는 것
+* constructor가 실행되면서 컴포넌트가 생성
+* 생성 직후 componentDidMount()함수가 호출
+* 컴포넌트가 소멸하기 전까지 여러번 렌더링
+* 렌더링은 props, setState(), forceUpdate()에 의해 상태가 변경되면 이루어짐
+* 그리고 렌더링이 끝나면 componentDinUpdate()함수가 호출
+* 컴포넌트가 언마운트 되면 compinentWillUnmount()함수가 호출
+
+
+
 ## 03월 27일 강의 내용
 ### JSX(Java Script XML)
-#### JSX(Java Script XML)란?
 * Javascript에 XML을 추가한 확장한 문법입니다.
+
 #### JSX의 역할
 * JSX는 내부적으로 XML/HTML 코드를 자바스크립트로 변환합니다.
 * React가 createElement함수를 사용하여 자동으로 자바스크립트로 변환해줍니다.
@@ -170,10 +322,12 @@ function tick() {
     ```
     컴포넌트(component)
     컴포넌트란, 재사용이 가능한 각각의 독립된 모듈이다. (재사용 가능한 UI 코드 조각)
-    우리가 흔히 이용하는 웹사이트들을 살펴보면, 반복되는 요소가 아주 많다는 것을 알 수 있다.
+    컴포넌트 구조라는 것은 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여 전체 페이지를 구성한다는 것을 의미한다.
+    재사용이 가능하기 때문에 전체 코드의 양을 줄일 수 있어 개발 시간과 유지 보수 비용이 줄어듭니다.
     ``` 
     * 리액트의 모든 페이지는 컴포넌트로 구성됩니다.
     * 하나의 컴포넌트는 다른 여러 개의 컴포넌트의 조합으로 구성할 수 있습니다.
+    * 컴포넌트 구조라는 것은 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여ㅓ 전체 페이지를 구성한다는 것을 의미합니다.
     * 그래서 리액트로 개발을 하다 보면 레고 블록을 조립나는 것처럼 컴포넌트를 조합해서 웹사이트를 개발하게 됩니다.
 
 3. **재사용성**
