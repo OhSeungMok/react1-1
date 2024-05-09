@@ -1,9 +1,113 @@
 # 오승목 202030321학번
+## 05월 08일 강의 내용
+### 이벤트 핸들러 추가하는 방법
+``` jsx
+function Toggle(props) {
+    const [isToggleOn, setIsToggleOn] = useState(true);
+
+    //방법 1. 함수 안에 함수로 정의
+    function handleClick() {
+        setIsToggleOn((isToggleOn) => !isToggleOn);
+    }
+    
+    //방법 2. arrow fucntion 사용해서 정의
+    const handleClick = () => {
+        setIsToggleOn((isToggleOn) => !isToggleOn);
+    }
+
+    return (
+        <button onClick={handleClick}>
+           {isToggleOn ? "켜짐" : "꺼짐"}
+        </button>
+    )
+}
+```
+
+### Arguments 전달하기
+* 함수를 정의할 떄는 파라미터(Parameter) 혹은 매개변수, 함수를 사용할 때는 아귀먼트(Argument) 혹은 인수 라고 부릅니다.
+* 이벤트 핸들러에 매개변수를 전달해야 하는 경우도 많습니다.
+``` jsx
+<button onClick={(event) => this.deleteItem(id, event)}>삭제하기</button>
+
+<button onClick={this.deleteItem.bind(this, id)}>삭제하기</button>
+```
+* 위의 코드는 모두 동일한 역할을 하지만 하나는 화살표 함수를, 다른 하나는 bind를 사용했습니다.
+* event라는 매개변수는 리액트의 이벤트 객체를 의미합니다.
+* 두 방법 모두 첫번째 매개변수는 id이고 두번째 매개변수로 event가 전달됩니다.
+* 첫 번째 코드는 명시적으로 event를 매개변수로 넣어주었고, 두번째 코드는 id 이후 두번째 매개변수로 event가 자동 전달됩니다. 
+* bind함수는 이벤트를 명확하게 정하지 않아도 사용 가능
+
+### 엘리먼트 변수
+* 렌더링해야 될 컴포넌트를 변수처럼 사용하는 방법이 엘리먼트 변수 입니다.
+``` jsx
+import { useState } from "react";
+
+export default function LoginControl(props) {
+    const [isLogin, setIsLogin] = useState(false)
+
+    const handleLoginClick = () => {
+        setIsLogin(true)
+    }
+
+    const handleLogoutClick = () => {
+        setIsLogin(false)
+    }
+
+    let button
+    if (isLogin) {
+        button = <button onClick = {handleLogoutClick}>로그아웃</button>
+    } else {
+        button = <button onClick = {handleLoginClick}>로그인</button>
+    }
+    return (
+        button
+    )
+}
+```
+
+### 인라인 조건
+* 필요한 곳에 조건문을 직접 넣어 사용하는 방법입니다.
+
+1. 인라인 if
+    * if문을 직접 사용하지 않고, 동일한 효과를 낵 ㅣ위해 && 논리 연산자를 사용합니다,
+    * &&는 and연산자로 모든 조건이 참일떄만 참이 됩니다.
+    * 첫 번째 조건이 거짓이면 두 번째 조건은 판단할 필요가 없습니다, 단축평가.
+    ``` jsx
+    {unreadMessages.length > 0 &&
+    <h2>
+        현재 {unreadMessages.length}개의 읽지 않은 메시지가 있습니다.
+    </h2>
+    }
+    ```
+2. 인라인 if-else
+    * 삼항 연산자를 사용합니다 조건문? 참일 경우 : 거짓일 경우
+    * 문자열이나 엘리먼트를 넣어서 사용할 수도 있습니다.
+    ``` jsx
+    function UserStatus(props) {
+        return (
+            <div>
+            이 사용자는 현재 <b>{props.isLoggedIn ? '로그인' : '로그인하지 않은'}<b> 상태입니다.
+            </div>
+        )
+    }
+    ```
+### 컴포넌트 렌더링 막기
+* 컴포넌트를 렌더링하고 싶지 않을 때에는 null을 리턴합니다.
+``` jsx
+function WarningBanner(props) {
+    if(!props.warning) {
+        return null;
+    }
+    return(
+        <div>경고!</div>
+    );
+}
+```
 ## 05월 01일 강의 내용
 ### 이벤트 처리
 * DOM에서 클릭 이벤트를 처리하는 예제 코드
 ``` jsx
-<button onClick="activate()">
+<button onclick="activate()">
     Activate
 </button>
 ```
@@ -14,9 +118,9 @@
 </button>
 ```
 * 둘의 차이점은
-    1. 이벤트 이름이 onclick에서 onClick으로 변경
+    1. 이벤트 이름이 onclick에서 onClick으로 변경(Camel case)
     2. 전달하려는 함수는 문자열에서 함수 그대로 전달
-* 이벤트가 발생했을 때 해당 이벤트를 처리하는 함수를 '이벤트 핸들러'라고 합니다. 또는 이벤트가 발생하는 것을 계속 듣고 있다는 의미로 '이벤트 리스너'라고 부르기도 합니다.
+* 이벤트가 발생했을 때 해당 이벤트를 처리하는 함수를 `이벤트 핸들러`라고 합니다. 또는 이벤트가 발생하는 것을 계속 듣고 있다는 의미로 `이벤트 리스너`라고 부르기도 합니다.
 
 ### 커스텀 훅
 * 필요하다면 직접 훅을 만들어 사용할 수 있음. 이것을 `커스텀 훅`이라고 합니다
