@@ -1,4 +1,165 @@
 # 오승목 202030321학번
+## 06월 05일 강의 내용
+* shared state는 state의 공유를 의미합니다.
+* 같은 부모 컴포넌트의 state를 자식 컴포넌트가 공유해서 사용하는 것입니다.
+
+* 입력 컴포넌트 추출하기
+```jsx
+import { useState } from "react";
+import BoilingVerdict from "./BoilingVerdict";
+
+export default function Calculator() {
+    const [temperature, setTemperrature] = useState('')
+    const handleChange = (e) => {
+        setTemperrature(e.target.value)
+    }
+
+    return(
+        <fieldset>
+            <legend>섭씨 온도를 입력하세요</legend>
+            <input type="number" value={temperature}
+            onChange={handleChange} />
+            <BoilingVerdict celsius={parseFloat(temperature)} />
+        </fieldset>
+    )
+}
+```
+* 이렇게 하는 이유는 용도에 따라 입력을 받을 수 있도록 해서 재사용이 가능하게 하기 위해서입니다.
+
+### shared State 적용하기
+* 다음은 하위 컴포넌트의 state를 부모 컴포넌트로 올려서 shared state를 적용합니다.
+이것을 Lifting State Up (State 끌어 올리기)라고 합니다.
+* 이를 위해 먼저 TemperatureInput 컴포넌트에서 온도 값을 가져오는 부분을 다음과 같이 수정합니다.
+* 이렇게 수정하면 온도를 state에서 가져오지 않고 props를 통해 가져옵니다.
+``` jsx
+export default function TemperatureInput(props) {
+    //const [temperature, setTemperature] = useState('')
+    const handleChange = (e) => {
+        //setTemperature(e.target.value)
+        props.onTemperatureChange(e.target.value)
+    }
+        return(
+        <fieldset>
+            <legend>섭씨 온도를 입력하세요(단위: {scaleName[props.scale]})</legend>
+            {/* <input type="number" value={temperature}
+            onChange={handleChange} /> */}
+            <input type="number" value={props.temperature}
+            onChange={handleChange} />
+        </fieldset>
+    )
+}
+```
+* 또 한가지 컴포넌트의 state를 사용하지 않기 때문에
+입력 값이 변경되었을 때 상위 컴포넌트로 변경된 값을 전달해 주어야 합니다.
+* 이를 위해 handler함수를 다음과 같이 수정해줍니다.
+* 최종 코드는 다음과 같이 state는 제거되고, 상위 컴포넌트에서 전달받은 값만 사용합니다.
+* 상위 컴포넌트인 Calculator에서 온도와 단위를 state로 갖고
+* 두개의 하위 컴포넌트는 각각 섭씨, 화씨로 변환된 온도와 단위, 그리고 온도를 업데이트하기 위한 함수를 props로 갖고 있습니다
+* 이렇게 모든 컴포넌트가 state를 갖지 않고, 상위 컴포넌트만 
+
+### 합성에 대해 알아보기
+* 합성(Compostion)은 여러 개의 컴포넌트를 합쳐서 새로운 컴포넌트를 만드는 것입니다.
+* 조합 방법에 따라 합서의 사용 기법은 다음과 같이 나눌 수 있습니다.
+1. Containment(담다, 포함하다, 격리하다)
+    * 특정 컴포넌트가 하위 컴포넌트를 포함하는 형태의 합성 방법입니다.
+    * 컴포넌트에 따라서는 어떤 자식 엘리먼트가 들어올지 미리 예상할 수 없는 경우가 있습니다.
+    * 범용적인 박스 역할을 하는 Sidebar 혹은 Dialog와 같은 컴포넌트에서 특히 자주 볼 수 있습니다.
+    * 이런 컴포넌트에서는 children prop을 사용하여 자식 엘리먼트를 출력에 그대로 전달하는 것이 좋습니다.
+    * 이때 children prop은 컴포넌트의 props에 기본적으로 들어있는 children속성을 사용합니다. 
+    * 리엑트에서는 props, children을 통해 하위 컴포넌트를 하나로 모아서 제공해줍니다.
+    * 만일 여러 개의 chidren 집합이 필요할 경우에도 별도로 props를 정의해서 각각 원하는 컴포넌트를 넣어줍니다.
+## 05월 29일 강의 내용
+### textarea 태그
+* HTML에서는 <.textarea>의 children으로 텍스트가 들어가는 형태입니다.
+``` jsx
+<textarea>
+    안녕하세요, 여기에 이렇게 텍스트가 들어가게 됩니다.
+</textarea>
+```
+* 리액트에서는 state를 통해 태그의 value라는 attribute를 변경하여 텍스트를 표시합니다.
+* select태그도 textarea와 동일합니다.
+``` jsx
+<select>
+    <option value="apple">사과</option>
+    <option value="banana">바나나</option>
+</select>
+```
+``` jsx
+export default function SignUp() {
+    const [name, setName] = useState()
+    const [gender, setGender] = useState('남자')
+
+    const handleChangeName = (e) => {
+        setName(e.target.value)
+    }
+
+    const handleChangeGender = (e) => {
+        setGender(e.target.value)
+    }
+
+    const handleSubmit = (e) => {
+        alert(`이름 : ${name}, 성별 : ${gender}`)
+        e.preventDefault()
+    }
+
+    return(
+        <form onSubmit={handleSubmit}>
+            <label>
+                이름 : <input type="text" placeholder="이름을 입력하세요." value={name} onChange={handleChangeName}/>
+            </label>
+            <br/>
+            <label>
+                성별 : 
+                <select>
+                    <option value={gender} onChange={handleChangeGender}>여성</option>
+                    <option value={gender} onChange={handleChangeGender} selected>남성</option>
+                </select>
+            </label>
+            <button type="submit">제출</button>
+        </form>
+    )
+}
+```
+
+### File input 태그
+* File input태그는 그 값이 읽기 전용이기 떄문에 리액트에서는 비제어 컴포넌트가 됩니다.
+``` jsx
+<input type="file"/>
+```
+
+### Input Null Value
+* 제어 컴포넌트에 value prop을 정해진 값으로 넣으면 코드를 수정하지 않는 한 입력값을 바꿀 수 없습니다.
+* 만약 value prop은 넣되 자유롭게 입력할 수 있게 만들고 싶다면 값이 undefined 또는 null을 넣어주면 됩니다.
+``` jsx
+ReactDOM.render(<input value="hi" />, rootNode);
+
+setTimeout(function() {
+    ReactDOM.render(<input value={null} />, rootNode);
+}, 1000);
+```
+
+### 사용자 입력 값 받기
+``` jsx
+export default function SignUp() {
+    const [name, setName] = useState()
+    const handleChangeName = (e) => {
+        setName(e.target.value)
+    }
+    const handleSubmit = (e) => {
+        alert(`이름 : ${name}`);
+        e.preventDefault()
+    }
+
+    return(
+        <form onSubmit={handleSubmit}>
+            <label>
+                이름 : <input type="text" placeholder="이름을 입력하세요." value={name} onChange={handleChangeName}/>
+            </label>
+            <button type="submit">제출</button>
+        </form>
+    )
+}
+```
 ## 05월 22일 강의 내용
 ### 리스트와 키
 * 리스트는 자바스크립트의 변수나 객체를 하나의 변수로 묶어 놓은 배열과 같은 것
