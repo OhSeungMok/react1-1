@@ -1,4 +1,187 @@
 # 오승목 202030321학번
+## 06월 12일 강의 내용
+### CSS
+* `CSS`는 Cascading Style Sheets의 약자로 스타일링을 위한 언어입니다.
+* `Cascading`이란 계단식이라는 뜻으로 한 엘리먼트에 여러 스타일이 적용될 경우 스타일간의 충돌을 막기 위해 계단식으로 스타일을 적용시키는 규칙을 갖고 있습니다.
+* 즉 하나의 스타일이 여러 개의 엘리먼트에 적용될 수도 있고, 하나의 엘리먼트에도 여러 개의 스타일이 적용될 수도 있습니다.
+* 엘리먼트에 스타일이 적용되는 규칙을 selector(선택자)라고 합니다. CSS는 이 선택자와 스타일로 이루어집니다.
+
+### CSS 문법과 선택자
+* 선택자를 먼저 쓰고 다음에 적용할 스타일을 중괄호 안에 세미콜론으로 구분하여 하나씩 작성합니다.
+``` css
+h1 {
+    color : green;
+    font-size : 16px;
+}
+```
+* 속성과 키값으로 이루어지며, 이들은 콜론(:)으로 구분하고 각스타일은 세미콜론(;)으로 구분합니다.
+* id선택자로도 사용할 수 있지만 자바스크립트에서도 id로 선택자를 사용하기 때문에 사용X
+* class 선택자
+``` html
+<span class="medium">
+    ...
+</span>
+```
+``` css
+.medium{
+    font-size: 20px;
+}
+```
+* 전체 선택자 Aterisk(*)
+``` css
+* {
+    font-size : 20px;
+}
+```
+* 그룹 선택자
+``` css
+h1, h2, p {
+    color : black;
+    font-size : 20px;
+}
+```
+* 상태 선택자
+    * hover는 마우스 커서가 엘리먼트 위에 올라왔을 때를 의미
+    * active는 엘리먼트가 클릭됐을 때를 의미
+    * focus는 엘리먼트카 초점을 갖고 있을 경우를 의미
+    * checked는 `<input>`태그가 체크되어 있는 경우를 의미
+    * first-child, last-child는 상위 엘리먼트 기준으로 각각 첫번째 child, 마지막 child일 경우를 의미
+
+### 레이아웃과 관련된 속성
+* 화면에 엘리먼트를 어떻게 배치할 것인지를 정의
+* display
+``` css
+div {
+    display: none | block | inline | flex;
+}
+```
+> * none은 존재하지만 화면에 보이지 않습니다.
+> * block은 세로로 정렬
+> * inline은 가로로 정렬
+> * inline-block은 기본적으로 inline의 특성을 갖지만 block의 특성을 사용할 수 있습니다.
+> * flex는 컨테이너 형태로 엘리먼트를 관리합니다.
+
+* visibility : 엘리먼트의 가시성
+``` css
+div {
+    visibility: visible | hidden;
+}
+```
+>* display:none은 엘리먼트의 영역이 보이지 않고, visibility:hidden는 차지하는 영역은 보입니다.
+
+* position:엘리먼트를 어떻게 위치시킬 것인지 정의
+``` css
+div {
+    position: static | relative | absolute | sticky
+}
+```
+
+### 엘리먼트의 크기를 나타내는 속성
+``` jsx
+npm install --save styled-components
+
+//설치 후 
+import styled from "styled-components"
+```
+``` css
+div {
+    width: ...;
+    height: ...;
+}
+```
+
+### 스타일 props 전달
+* styled-component
+    * props를 이용해서 스타일을 지정할 수 있다.
+``` jsx
+import styled from "styled-components"
+
+const Wrapper = styled.div`
+    padding: 1em;
+    background: gray;
+`
+
+const Title = styled.h1`
+    font-size: 1.5em;
+    color: white;
+    text-align: center;
+`
+const Button = styled.button`
+    color:${props => props.dark? 'white' : 'dark'};
+    background:${props => props.dark? 'black' : 'white'};
+    border: 1px solid black;
+`
+
+export default function MainPage() {
+    return(
+        <Wrapper>
+            <Title>
+                안녕 리액트!
+            </Title>
+            <Button>Nomal</Button>
+            <Button dark>Dark</Button>
+        </Wrapper>
+    )
+}
+```
+
+* styled-component 가져오기
+``` jsx
+const Button = styled.button`
+    color:${props => props.dark? 'white' : 'dark'};
+    background:${props => props.dark? 'black' : 'white'};
+    border: 1px solid black;
+`
+const RoundButton = styled(Button)`
+    border-radius: 16px;
+`
+```
+
+* styled-component 리스트 
+``` jsx
+const blockItem = [
+    {
+        label: '1',
+        padding: '1rem',
+        backgroundColor: 'red', 
+    },
+
+    {
+        label: '2',
+        padding: '2rem',
+        backgroundColor: 'green', 
+    },
+
+    {
+        label: '3',
+        padding: '3rem',
+        backgroundColor: 'blue', 
+    }
+]
+
+        <Wrapper>
+            <Title>
+                안녕 리액트!
+            </Title>
+            <Button>Nomal</Button>
+            <Button dark>Dark</Button>
+            <RoundButton>Round</RoundButton>
+            <br/><br/>
+            {blockItem.map((item) => (
+                <div
+                style={{
+                    padding: item.padding,
+                    backgroundColor: item.backgroundColor,
+                }}
+                >
+                {item.label}
+                </div>
+            ))}
+
+        </Wrapper>
+```
+
+
 ## 06월 11일 강의 내용
 ### Specialization (특수화, 전문화)
 * 웰컴다이얼로그는 다이얼로그의 특별한 케이스입니다.
