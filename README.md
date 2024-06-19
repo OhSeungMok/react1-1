@@ -1,4 +1,6 @@
 # 오승목 202030321학번
+### React 프로젝트 만드는 법
+`npx create-react-app project명`
 ## 06월 12일 강의 내용
 ### CSS
 * `CSS`는 Cascading Style Sheets의 약자로 스타일링을 위한 언어입니다.
